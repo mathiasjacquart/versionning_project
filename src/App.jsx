@@ -8,6 +8,7 @@ import RegisterForm from "./components/RegisterForm";
 import UserProfile from "./components/UserProfile";
 import LogoutButton from "./components/LogoutButton";
 import AlbumList from "./components/albums/AlbumList";
+import AlbumDetail from "./components/albums/AlbumDetail";
 
 import "./App.css";
 
@@ -77,7 +78,8 @@ function App() {
             </>
           ) : (
             <>
-              <Route path="/albums" element={<AlbumList />} />
+              <Route path="/albums" element={<AlbumList uid={user.uid} />} />
+              <Route path="/albums/:albumId" element={<AlbumDetail uid={user.uid} />} />
               <Route path="*" element={<Navigate to="/albums" replace />} />
             </>
           )}

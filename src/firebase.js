@@ -3,6 +3,7 @@ import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
 import { getFirestore } from "firebase/firestore";
 import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -57,4 +58,65 @@ export const getAlbumsByUser = async (uid) => {
     }
   });
   return albums;
+};
+
+
+
+
+
+
+// Ajouter une photo à un album
+export const addPhoto = async (albumId, file, data) => {
+  if (!file) throw new Error("Fichier manquant");
+
+  // Générer un nom de fichier unique pour éviter les collisions et problèmes CORS
+  const fileExtension = file.name.split('.').pop();
+  const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 10)}.${fileExtension}`;
+
+  const storageRef = ref(storage, `albums/${albumId}/${fileName}`);
+
+  // Upload du fichier
+  await uploadBytes(storageRef, file);
+
+  // Récupérer l'URL publique
+  const imageUrl = await getDownloadURL(storageRef);
+
+  // Enregistrer dans Firestore
+  const docRef = await addDoc(collection(db, "albums", albumId, "photos"), {
+    ...data,
+    imageUrl,
+    fileName, // on stocke le nom du fichier pour suppression future
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  });
+
+  return docRef.id;
+};
+
+// Modifier une photo (titre/description seulement)
+export const updatePhoto = async (albumId, photoId, data) => {
+  const photoRef = doc(db, 'albums', albumId, 'photos', photoId);
+  await updateDoc(photoRef, {
+    ...data,
+    updatedAt: new Date(),
+  });
+};
+
+// Supprimer une photo (Firestore + Storage)
+export const deletePhoto = async (albumId, photoId, fileName) => {
+  const photoRef = doc(db, 'albums', albumId, 'photos', photoId);
+  await deleteDoc(photoRef);
+
+  const storageRef = ref(storage, `albums/${albumId}/${fileName}`);
+  await deleteObject(storageRef);
+};
+
+// Récupérer toutes les photos d’un album
+export const getPhotosByAlbum = async (albumId) => {
+  const querySnapshot = await getDocs(collection(db, 'albums', albumId, 'photos'));
+  const photos = [];
+  querySnapshot.forEach((doc) => {
+    photos.push({ id: doc.id, ...doc.data() });
+  });
+  return photos;
 };

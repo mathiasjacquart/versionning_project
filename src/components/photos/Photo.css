@@ -1,0 +1,67 @@
+.photo-list {
+  margin-top: 20px;
+}
+
+.photo-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.photo-item {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  width: 220px;
+  text-align: center;
+  background-color: #f9f9f9;
+}
+
+.photo-item img {
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.photo-item button {
+  margin: 5px;
+  padding: 5px 10px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+.photo-item button:first-of-type {
+  background-color: #4caf50;
+  color: white;
+}
+
+.photo-item button:last-of-type {
+  background-color: #f44336;
+  color: white;
+}
+
+.photo-form {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  background-color: #fff;
+}
+
+.photo-form div {
+  margin-bottom: 10px;
+}
+
+.photo-form label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.photo-form input,
+.photo-form textarea {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}

@@ -1,5 +1,4 @@
-// src/components/albums/AlbumItem.jsx
-import React from "react";
+import { Link } from "react-router-dom";
 
 const AlbumItem = ({ album, onEdit, onDelete }) => {
   return (
@@ -8,6 +7,9 @@ const AlbumItem = ({ album, onEdit, onDelete }) => {
       <p>{album.description}</p>
       <button onClick={() => onEdit(album)}>Modifier</button>
       <button onClick={() => onDelete(album.id)}>Supprimer</button>
+      <Link to={`/albums/${album.id}`} style={{ marginLeft: "10px" }}>
+        Voir
+      </Link>
     </div>
   );
 };
