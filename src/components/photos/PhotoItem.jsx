@@ -1,6 +1,7 @@
 import React from "react";
+import CommentList from "./CommentList";
 
-const PhotoItem = ({ photo, onEdit, onDelete }) => {
+const PhotoItem = ({ photo, albumId, album, onEdit, onDelete }) => {
   return (
     <div className="photo-item">
       <div className="photo-item__image-wrapper">
@@ -21,6 +22,9 @@ const PhotoItem = ({ photo, onEdit, onDelete }) => {
           Supprimer
         </button>
       </div>
+      {album && (
+        <CommentList albumId={albumId} photoId={photo.id} album={album} />
+      )}
     </div>
   );
 };

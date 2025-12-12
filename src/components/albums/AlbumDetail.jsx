@@ -44,7 +44,7 @@ const AlbumDetail = ({ uid }) => {
         </Link>
       </div>
       <AlbumShare album={album} />
-      <PhotoList albumId={album.id} />
+      <PhotoList albumId={album.id} album={album} />
     </div>
   );
 };

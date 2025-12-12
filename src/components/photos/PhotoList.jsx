@@ -10,7 +10,7 @@ import PhotoItem from "./PhotoItem";
 import PhotoForm from "./PhotoForm";
 import "./Photo.css";
 
-const PhotoList = ({ albumId }) => {
+const PhotoList = ({ albumId, album }) => {
   const [photos, setPhotos] = useState([]);
   const [editingPhoto, setEditingPhoto] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -84,6 +84,8 @@ const PhotoList = ({ albumId }) => {
             <PhotoItem
               key={photo.id}
               photo={photo}
+              albumId={albumId}
+              album={album}
               onEdit={handleEdit}
               onDelete={handleDelete}
             />
