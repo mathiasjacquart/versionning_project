@@ -61,10 +61,6 @@ export const getAlbumsByUser = async (uid) => {
 };
 
 
-
-
-
-
 // Ajouter une photo à un album
 export const addPhoto = async (albumId, file, data) => {
   if (!file) throw new Error("Fichier manquant");

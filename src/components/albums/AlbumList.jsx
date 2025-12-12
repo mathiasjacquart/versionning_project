@@ -50,9 +50,15 @@ const AlbumList = () => {
   };
 
   return (
-    <div>
-      <h2>Mes albums</h2>
-      {!showForm && <button onClick={() => setShowForm(true)}>Créer un album</button>}
+    <div className="album-list-container">
+      <div className="album-list-header">
+        <h2>Mes albums</h2>
+        {!showForm && (
+          <button className="btn-primary" onClick={() => setShowForm(true)}>
+            Créer un album
+          </button>
+        )}
+      </div>
       {showForm && (
         <AlbumForm
           onSubmit={editingAlbum ? handleUpdate : handleCreate}
@@ -60,16 +66,29 @@ const AlbumList = () => {
           onCancel={() => { setEditingAlbum(null); setShowForm(false); }}
         />
       )}
-      <div>
-        {albums.map((album) => (
-          <AlbumItem
-            key={album.id}
-            album={album}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
-        ))}
-      </div>
+      {albums.length > 0 ? (
+        <div className="album-list-grid">
+          {albums.map((album) => (
+            <AlbumItem
+              key={album.id}
+              album={album}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+          ))}
+        </div>
+      ) : (
+        !showForm && (
+          <div style={{ 
+            textAlign: 'center', 
+            padding: '60px 20px', 
+            color: '#64748b',
+            fontSize: '1.1rem'
+          }}>
+            Aucun album pour le moment. Créez votre premier album !
+          </div>
+        )
+      )}
     </div>
   );
 };

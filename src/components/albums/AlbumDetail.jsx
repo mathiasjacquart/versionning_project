@@ -18,15 +18,30 @@ const AlbumDetail = ({ uid }) => {
     if (uid) fetchAlbum();
   }, [albumId, uid]);
 
-  if (!album) return <p>Chargement de l’album...</p>;
+  if (!album) {
+    return (
+      <div className="album-detail-container">
+        <div style={{ 
+          textAlign: 'center', 
+          padding: '60px 20px', 
+          color: '#64748b',
+          fontSize: '1.1rem'
+        }}>
+          Chargement de l'album...
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div>
-      <h2>{album.title}</h2>
-      <p>{album.description}</p>
-      <Link to="/albums">← Retour aux albums</Link>
-
-      <h3>Photos</h3>
+    <div className="album-detail-container">
+      <div className="album-detail-header">
+        <h2>{album.title}</h2>
+        {album.description && <p>{album.description}</p>}
+        <Link to="/albums" className="album-detail-back-link">
+          ← Retour aux albums
+        </Link>
+      </div>
       <PhotoList albumId={album.id} />
     </div>
   );
