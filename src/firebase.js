@@ -4,6 +4,7 @@ import { getStorage } from "firebase/storage";
 import { getFirestore } from "firebase/firestore";
 import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
+import { arrayUnion, arrayRemove } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -115,4 +116,25 @@ export const getPhotosByAlbum = async (albumId) => {
     photos.push({ id: doc.id, ...doc.data() });
   });
   return photos;
+};
+
+
+// Partager un album avec un utilisateur (UID)
+export const shareAlbum = async (albumId, uid) => {
+  const albumRef = doc(db, "albums", albumId);
+
+  await updateDoc(albumRef, {
+    sharedWith: arrayUnion(uid),
+    updatedAt: new Date(),
+  });
+};
+
+// Retirer un utilisateur du partage
+export const unshareAlbum = async (albumId, uid) => {
+  const albumRef = doc(db, "albums", albumId);
+
+  await updateDoc(albumRef, {
+    sharedWith: arrayRemove(uid),
+    updatedAt: new Date(),
+  });
 };
