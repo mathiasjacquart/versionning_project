@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getAlbumsByUser } from "../../firebase";
 import PhotoList from "../photos/PhotoList";
+import AlbumShare from "./AlbumShare";
 
 const AlbumDetail = ({ uid }) => {
   const { albumId } = useParams();
@@ -42,6 +43,7 @@ const AlbumDetail = ({ uid }) => {
           ← Retour aux albums
         </Link>
       </div>
+      <AlbumShare album={album} />
       <PhotoList albumId={album.id} />
     </div>
   );
