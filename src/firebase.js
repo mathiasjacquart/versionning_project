@@ -138,3 +138,35 @@ export const unshareAlbum = async (albumId, uid) => {
     updatedAt: new Date(),
   });
 };
+
+// Ajouter un commentaire à une photo
+export const addComment = async (albumId, photoId, comment, userId, userEmail) => {
+  const docRef = await addDoc(collection(db, 'albums', albumId, 'photos', photoId, 'comments'), {
+    text: comment,
+    userId,
+    userEmail,
+    createdAt: new Date(),
+  });
+  return docRef.id;
+};
+
+// Récupérer tous les commentaires d'une photo
+export const getCommentsByPhoto = async (albumId, photoId) => {
+  const querySnapshot = await getDocs(collection(db, 'albums', albumId, 'photos', photoId, 'comments'));
+  const comments = [];
+  querySnapshot.forEach((doc) => {
+    comments.push({ id: doc.id, ...doc.data() });
+  });
+  // Trier par date de création (plus récent en premier)
+  return comments.sort((a, b) => {
+    const dateA = a.createdAt?.toDate?.() || new Date(a.createdAt);
+    const dateB = b.createdAt?.toDate?.() || new Date(b.createdAt);
+    return dateB - dateA;
+  });
+};
+
+// Supprimer un commentaire
+export const deleteComment = async (albumId, photoId, commentId) => {
+  const commentRef = doc(db, 'albums', albumId, 'photos', photoId, 'comments', commentId);
+  await deleteDoc(commentRef);
+};
