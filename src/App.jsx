@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
+import { BrowserRouter, Routes, Route, Navigate, Link } from "react-router-dom";
+
 import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
 import UserProfile from "./components/UserProfile";
 import LogoutButton from "./components/LogoutButton";
+import AlbumList from "./components/albums/AlbumList";
+
 import "./App.css";
 
 function App() {
@@ -24,50 +28,62 @@ function App() {
   };
 
   return (
-    <div className="app-container">
+    <BrowserRouter>
       {user && (
         <header className="app-header">
           <UserProfile user={user} />
           <LogoutButton user={user} />
+          <nav>
+            <Link to="/albums">Mes Albums</Link>
+          </nav>
         </header>
       )}
 
       <main className="app-main">
-        {!user ? (
-          <section className="auth-card">
-            <header className="auth-card__header">
-              <h1>{mode === "login" ? "Connexion" : "Inscription"}</h1>
-              <p>
-                {mode === "login"
-                  ? "Accédez à votre compte."
-                  : "Créez un compte avec e-mail et mot de passe."}
-              </p>
-            </header>
+        <Routes>
+          {!user ? (
+            <>
+              <Route
+                path="/*"
+                element={
+                  <section className="auth-card">
+                    <header className="auth-card__header">
+                      <h1>{mode === "login" ? "Connexion" : "Inscription"}</h1>
+                      <p>
+                        {mode === "login"
+                          ? "Accédez à votre compte."
+                          : "Créez un compte avec e-mail et mot de passe."}
+                      </p>
+                    </header>
 
-            {mode === "login" ? (
-              <LoginForm
-                onSuccess={() => {}}
-                onToggleMode={toggleMode}
-                loading={loading}
-                setLoading={setLoading}
+                    {mode === "login" ? (
+                      <LoginForm
+                        onSuccess={() => {}}
+                        onToggleMode={toggleMode}
+                        loading={loading}
+                        setLoading={setLoading}
+                      />
+                    ) : (
+                      <RegisterForm
+                        onSuccess={() => {}}
+                        onToggleMode={toggleMode}
+                        loading={loading}
+                        setLoading={setLoading}
+                      />
+                    )}
+                  </section>
+                }
               />
-            ) : (
-              <RegisterForm
-                onSuccess={() => {}}
-                onToggleMode={toggleMode}
-                loading={loading}
-                setLoading={setLoading}
-              />
-            )}
-          </section>
-        ) : (
-          <div className="welcome-message">
-            <h2>Bienvenue {user.displayName || user.email} !</h2>
-            <p>Vous êtes maintenant connecté.</p>
-          </div>
-        )}
+            </>
+          ) : (
+            <>
+              <Route path="/albums" element={<AlbumList />} />
+              <Route path="*" element={<Navigate to="/albums" replace />} />
+            </>
+          )}
+        </Routes>
       </main>
-    </div>
+    </BrowserRouter>
   );
 }
 
